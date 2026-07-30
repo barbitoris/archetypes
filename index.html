@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Les Douze Figures · test d'auto-positionnement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --encre:#101733;
+    --encre-panneau:#18213F;
+    --encre-creux:#0B1027;
+    --or:#C9A227;
+    --or-pale:#E3C766;
+    --verdet:#4E8C7D;
+    --carmin:#B4626C;
+    --azur:#5B84BD;
+    --papier:#EDE8DC;
+    --papier-doux:#A9A79C;
+    --trait:rgba(201,162,39,.28);
+    --display:"Bodoni Moda",Georgia,serif;
+    --corps:"Spectral",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{
+    -webkit-text-size-adjust:100%;text-size-adjust:100%;   /* iOS : pas d'inflation en paysage */
+    -webkit-tap-highlight-color:rgba(201,162,39,.18)
+  }
+  body{
+    background:var(--encre);
+    background-image:
+      radial-gradient(circle at 18% 8%, rgba(78,140,125,.16), transparent 55%),
+      radial-gradient(circle at 84% 92%, rgba(201,162,39,.12), transparent 55%);
+    background-attachment:fixed;
+    color:var(--papier);
+    font-family:var(--corps);
+    font-weight:300;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .cadre{max-width:760px;margin:0 auto;padding:34px 20px 72px}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--or);margin:0 0 18px
+  }
+  .filet{height:1px;background:var(--trait);border:0;margin:26px 0}
+
+  h1{
+    font-family:var(--display);font-weight:400;font-size:clamp(40px,11vw,74px);
+    line-height:.98;letter-spacing:-.015em;margin:0 0 4px
+  }
+  h1 em{font-style:italic;color:var(--or-pale)}
+  .sous{font-size:15px;color:var(--papier-doux);max-width:44ch;margin:14px 0 0}
+  .sous strong{color:var(--papier);font-weight:600}
+
+  .romain{
+    font-family:var(--display);font-size:13px;letter-spacing:.3em;color:var(--verdet);
+    display:block;margin-bottom:6px
+  }
+
+  button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+  .bouton{
+    font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    border:1px solid var(--or);color:var(--or-pale);
+    padding:14px 26px;border-radius:2px;background:rgba(201,162,39,.06);
+    transition:background .25s,color .25s
+  }
+  .bouton.discret{border-color:rgba(237,232,220,.22);color:var(--papier-doux);background:none}
+  :focus-visible{outline:2px solid var(--or-pale);outline-offset:3px}
+
+  /* progression */
+  .jauge{display:flex;gap:3px;margin:0 0 22px}
+  .tk{
+    flex:1;height:3px;padding:0;border:0;border-radius:2px;
+    background:rgba(237,232,220,.13);position:relative;cursor:pointer;
+    transition:background .2s,transform .2s
+  }
+  /* zone tactile élargie sans épaissir la frise */
+  .tk::after{content:"";position:absolute;left:0;right:0;top:-11px;bottom:-11px}
+  .tk.faite{background:var(--or)}
+  .tk:disabled{cursor:default;opacity:.55}
+  .tk.courante{background:var(--papier);transform:scaleY(2.4)}
+  .tk.vue{background:var(--verdet);transform:scaleY(3)}
+
+  .apercu{
+    border:1px solid var(--trait);border-left:3px solid var(--verdet);border-radius:2px;
+    background:linear-gradient(180deg,rgba(24,33,63,.95),rgba(11,16,39,.85));
+    padding:16px 18px;margin:-8px 0 22px
+  }
+  .ap-num{
+    font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--or);margin:0 0 8px
+  }
+  .ap-texte{font-family:var(--display);font-size:19px;line-height:1.3;margin:0 0 10px}
+  .ap-rep{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--papier-doux);margin:0}
+  .ap-rep b{color:var(--or-pale);font-weight:500}
+  .ap-nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .ap-nav .bouton{padding:10px 18px;font-size:11px}
+  .compteur{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--papier-doux);display:flex;justify-content:space-between;margin-bottom:10px}
+
+  /* question */
+  .question{
+    font-family:var(--display);font-size:clamp(22px,5.6vw,31px);line-height:1.24;font-weight:400;
+    margin:0 0 30px;min-height:2.6em
+  }
+  .echelle{display:grid;gap:8px}
+  .choix{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    border:1px solid rgba(237,232,220,.14);border-radius:2px;padding:13px 16px;
+    background:rgba(24,33,63,.55);transition:border-color .2s,background .2s
+  }
+  .choix .cote{font-family:var(--mono);font-size:12px;color:var(--or);width:1.2em}
+  .choix .lib{font-size:15px}
+  .choix[aria-pressed="true"]{border-color:var(--or);background:rgba(201,162,39,.14)}
+
+  .barre-nav{display:flex;gap:10px;margin-top:26px;align-items:center;flex-wrap:wrap}
+  textarea#secours-txt{
+    width:100%;margin-top:8px;background:var(--encre-creux);color:var(--papier);
+    border:1px solid var(--trait);border-radius:2px;padding:12px;
+    font-family:var(--mono);font-size:12px;line-height:1.7;resize:vertical
+  }
+  .aide{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:rgba(169,167,156,.7);margin:18px 0 0}
+  .aide b{color:var(--or);font-weight:500}
+  @media (max-width:520px){.aide{display:none}}
+
+  /* resultats */
+  .dial{width:100%;max-width:470px;margin:4px auto 0;display:block}
+  .dial .secteur{cursor:pointer;transition:opacity .2s}
+  .dial text{font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+
+  .fiche{
+    border:1px solid var(--trait);border-left:3px solid var(--or);
+    background:linear-gradient(180deg,rgba(24,33,63,.9),rgba(11,16,39,.75));
+    padding:20px 20px 18px;margin:14px 0;border-radius:2px
+  }
+  .fiche.deux{border-left-color:var(--verdet)}
+  .fiche.trois{border-left-color:var(--carmin)}
+  .fiche h3{font-family:var(--display);font-size:26px;font-weight:400;margin:2px 0 2px}
+  .fiche .devise{font-style:italic;color:var(--or-pale);font-size:15px;margin:0 0 14px}
+  .fiche dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14.5px}
+  .fiche dt{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--papier-doux);padding-top:5px}
+  .fiche dd{margin:0}
+  .score{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--or);float:right}
+
+  /* ---- Classement dépliable ---- */
+  .lg-entete,.lg-grille{
+    display:grid;align-items:center;gap:0 10px;
+    grid-template-columns:1em 2.2em minmax(0,1fr) 20% 3.2em 3em 60px;
+    grid-template-areas:"m r n t i e p";
+  }
+  .lg-entete{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--papier-doux);padding:0 0 7px;border-bottom:1px solid var(--trait)
+  }
+  .ligne{border-bottom:1px solid rgba(237,232,220,.08)}
+  .ligne summary{
+    display:block;list-style:none;cursor:pointer;padding:11px 0;
+    border-left:2px solid transparent;transition:border-color .2s,background .2s
+  }
+  .ligne summary::-webkit-details-marker{display:none}
+  .ligne summary::marker{content:""}
+  .ligne[open] summary{border-left-color:var(--or);padding-left:8px;background:rgba(201,162,39,.06)}
+  .mq{grid-area:m;font-family:var(--mono);font-size:12px;color:var(--or);text-align:center}
+  .mq::before{content:"+"}
+  .ligne[open] .mq::before{content:"–"}
+  .lg-rang{grid-area:r;font-family:var(--mono);font-size:11px;color:var(--papier-doux)}
+  .lg-nom{grid-area:n;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ligne[open] .lg-nom{color:var(--or-pale)}
+  .lg-trace{grid-area:t}
+  .lg-trace i{display:block;height:5px;background:var(--or);border-radius:2px;min-width:2px}
+  .lg-val{grid-area:i;font-family:var(--mono);font-size:12px;color:var(--or-pale);text-align:right}
+  .lg-val+.lg-val{grid-area:e}
+  .lg-val.plus{color:var(--or-pale)}
+  .lg-val.moins{color:rgba(180,98,108,.85)}
+  .lg-rar{grid-area:p;text-align:right}
+  .lg-corps{padding:2px 0 20px 10px;border-left:2px solid var(--trait);margin-left:0}
+  .lg-corps .devise{margin-top:0}
+  @media (max-width:600px){
+    .lg-entete,.lg-grille{
+      grid-template-columns:1em 2.2em minmax(0,1fr) 3.2em 3em;
+      grid-template-areas:
+        "m r n i e"
+        ". . t t p";
+      row-gap:7px
+    }
+    .lg-trace{align-self:center}
+    .lg-rar{padding-left:8px}
+  }
+  details.methode{
+    border:1px solid var(--trait);border-radius:2px;margin-top:14px;
+    background:rgba(11,16,39,.5)
+  }
+  details.methode summary{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--or);padding:14px 16px;cursor:pointer;list-style:none
+  }
+  details.methode summary::before{content:"+ ";font-weight:500}
+  details.methode[open] summary::before{content:"– "}
+  details.methode summary::-webkit-details-marker{display:none}
+  details.methode p,details.methode ul{
+    font-size:13.5px;color:var(--papier-doux);line-height:1.62;margin:0 16px 14px;padding-left:0
+  }
+  details.methode ul{padding-left:18px}
+  details.methode li{margin-bottom:6px}
+  details.methode b{color:var(--papier);font-weight:600}
+
+
+  .note{font-size:13.5px;color:var(--papier-doux);border-top:1px solid var(--trait);padding-top:16px;margin-top:34px}
+  /* ---- Quadrants ---- */
+  #quadrants{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:460px){#quadrants{grid-template-columns:1fr}}
+  .quad{
+    border:1px solid var(--trait);border-top:3px solid var(--t);border-radius:2px;
+    background:linear-gradient(180deg,rgba(24,33,63,.85),rgba(11,16,39,.6));
+    padding:13px 14px 14px
+  }
+  .quad-tete{display:flex;justify-content:space-between;align-items:baseline}
+  .quad-rang{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--papier-doux)}
+  .quad-val{font-family:var(--mono);font-size:20px;color:var(--t);line-height:1}
+  .quad-cent{font-size:10px;color:var(--papier-doux);letter-spacing:.1em}
+  .quad-nom{font-family:var(--display);font-size:21px;font-weight:400;margin:8px 0 2px;color:var(--t)}
+  .quad-desir{font-size:13px;color:var(--papier);margin:0 0 10px;font-style:italic}
+  .quad-barre{height:5px;background:rgba(237,232,220,.10);border-radius:3px;overflow:hidden}
+  .quad-barre i{display:block;height:100%;border-radius:3px;min-width:2px;background:var(--t)}
+  .quad-fig{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--papier-doux);margin:9px 0 0}
+  .dial .q-lib{font-family:var(--mono);font-size:10px;letter-spacing:.16em}
+  .dial .q-val{font-family:var(--mono);font-size:10px;letter-spacing:.08em}
+  .pips{display:inline-block;vertical-align:middle;margin-right:6px;white-space:nowrap}
+  .pip{
+    display:inline-block;width:7px;height:7px;margin-right:4px;
+    border:1px solid var(--or);transform:rotate(45deg)
+  }
+  .pip.on{background:var(--or)}
+  .rar-lib{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--or-pale);font-weight:500}
+  .rar-pct{
+    display:block;margin-top:4px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.06em;color:var(--verdet)
+  }
+  .rar-note{display:block;margin-top:5px;font-size:13px;color:var(--papier-doux);font-style:italic}
+  .en{font-family:var(--mono);font-size:.62em;letter-spacing:.06em;color:var(--papier-doux)}
+  .lg-nom .en{font-size:10.5px}
+  @media (max-width:400px){.lg-nom .en{display:none}}
+  table.tab-rar{width:auto;border-collapse:collapse;margin:0 16px 14px;font-family:var(--mono);font-size:11.5px}
+  table.tab-rar td{padding:4px 16px 4px 0;border-bottom:1px solid rgba(237,232,220,.08);color:var(--papier-doux)}
+  table.tab-rar td:first-child{color:var(--or)}
+  table.tab-rar td:last-child{color:var(--or-pale);padding-right:0}
+  /* ---- Bibliographie ---- */
+  .biblio h4{
+    font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--or);font-weight:500;margin:22px 0 8px
+  }
+  .biblio h4:first-child{margin-top:0}
+  .biblio ul{list-style:none;margin:0;padding:0}
+  .biblio li{
+    font-size:13.5px;line-height:1.55;color:var(--papier);
+    padding:0 0 12px 14px;border-left:1px solid var(--trait);margin-bottom:10px
+  }
+  .biblio i{color:var(--or-pale);font-style:italic}
+  .biblio-note{display:block;margin-top:4px;font-size:12.5px;color:var(--papier-doux);font-style:italic}
+  .biblio a{
+    display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--verdet);text-decoration:none;
+    border-bottom:1px solid rgba(78,140,125,.5)
+  }
+  .avertissement{
+    border:1px solid var(--trait);border-left:3px solid var(--verdet);
+    background:rgba(78,140,125,.07);border-radius:2px;
+    padding:14px 16px;margin:18px 0 0;font-size:13.5px;color:var(--papier-doux);line-height:1.62
+  }
+  .avertissement strong{color:var(--papier);font-weight:600}
+  /* ---- Panneau de partage ---- */
+  .voile{
+    position:fixed;inset:0;z-index:60;
+    display:flex;align-items:flex-end;justify-content:center;
+    background:rgba(6,9,22,.78);padding:16px
+  }
+  @media (min-width:560px){.voile{align-items:center}}
+  .feuille{
+    width:100%;max-width:430px;
+    border:1px solid var(--or);border-radius:3px;
+    background:linear-gradient(180deg,#1A2340,#0C1128);
+    padding:20px 18px 18px;box-shadow:0 -8px 40px rgba(0,0,0,.6);
+    padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))
+  }
+  .feuille .eyebrow{margin-bottom:16px}
+  .opt{
+    display:block;width:100%;text-align:left;cursor:pointer;
+    border:1px solid var(--trait);border-left:3px solid var(--or);border-radius:2px;
+    background:rgba(201,162,39,.05);padding:14px 15px;margin-bottom:10px
+  }
+  .opt:active{background:rgba(201,162,39,.16)}
+  .opt-t{
+    display:block;font-family:var(--display);font-size:20px;color:var(--or-pale);
+    margin-bottom:5px
+  }
+  .opt-d{display:block;font-size:13px;line-height:1.5;color:var(--papier-doux)}
+
+  /* Bouton de partage flottant : dans #resultats, donc masqué avec la section */
+  .fab{
+    position:fixed;z-index:40;
+    top:calc(10px + env(safe-area-inset-top,0px));
+    right:calc(10px + env(safe-area-inset-right,0px));
+    display:flex;align-items:center;gap:7px;
+    padding:9px 14px 9px 11px;border:1px solid var(--or);border-radius:999px;
+    background:rgba(11,16,39,.93);color:var(--or-pale);cursor:pointer;
+    font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    box-shadow:0 4px 18px rgba(0,0,0,.5)
+  }
+  .fab svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;
+    stroke-linecap:round;stroke-linejoin:round}
+  .fab:active{background:var(--or);color:var(--encre-creux)}
+  #resultats{padding-top:44px}
+  .cache{display:none}
+  /* Survol réservé aux pointeurs précis : sur écran tactile l'état :hover
+     reste collé à l'élément touché et surlignait la réponse suivante. */
+  @media (hover:hover) and (pointer:fine){
+    .bouton:hover{background:var(--or);color:var(--encre-creux)}
+    .bouton.discret:hover{border-color:var(--papier-doux);color:var(--papier);background:none}
+    .tk:not(:disabled):hover{background:var(--or-pale);transform:scaleY(2.4)}
+    .choix:hover{border-color:var(--or);background:rgba(201,162,39,.08)}
+    .dial .secteur:hover{opacity:.75}
+    .ligne summary:hover{background:rgba(201,162,39,.05)}
+    .biblio a:hover{color:var(--or-pale);border-bottom-color:var(--or)}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  /* ==== Impression et export PDF ====
+     Thème clair imposé : le fond sombre dépend de l'option « graphiques
+     d'arrière-plan » de la boîte d'impression, souvent désactivée, ce qui
+     donnerait un texte pâle sur fond blanc. Les remplissages SVG, eux,
+     sont du contenu et s'impriment toujours. */
+  @media print{
+    @page{margin:14mm}
+    :root{
+      --papier:#141821;--papier-doux:#4B515B;
+      --or:#8A6D10;--or-pale:#6E5608;--verdet:#2E6155;
+      --carmin:#8D3F48;--azur:#2F5488;--trait:#C7C0AC
+    }
+    body{background:#fff!important;background-image:none!important;color:#141821}
+    .cadre{max-width:none;padding:0}
+    #accueil,#test,#bloc-partage,#secours,.bandeau-demo,.barre-nav,.fab,.voile{display:none!important}
+    #resultats{padding-top:0}
+    .aide:not(#quad-lecture):not(#lecture-ecart){display:none!important}
+    details.methode summary{display:none!important}
+    details.methode{border:0;background:none}
+    .fiche,.quad,.avertissement,.apercu,.ligne summary,.ligne[open] summary{
+      background:none!important;box-shadow:none
+    }
+    /* les barres et pastilles sont des arrière-plans : on garde les nombres */
+    .lg-trace,.quad-barre,.pips,.d-pastille{display:none!important}
+    .dial text{fill:#141821!important}
+    .dial{max-width:130mm}
+    .ligne,.fiche,.quad,.biblio li{break-inside:avoid}
+    hr.filet{background:#C7C0AC}
+    h1{font-size:30pt;line-height:1}
+    .biblio a{text-decoration:none}
+    .biblio a::after{content:" — " attr(href);font-family:var(--mono);font-size:8pt;word-break:break-all}
+    #quadrants{grid-template-columns:1fr 1fr!important}
+  }
+</style>
+</head>
+<body>
+<main class="cadre">
+
+  <!-- ACCUEIL -->
+  <section id="accueil">
+    <p class="eyebrow">Archétypes jungiens · auto-positionnement</p>
+    <h1>Les Douze<br><em>Figures</em></h1>
+    <p class="sous">Souverain, Magicien, Créateur, Amant, Héros, Explorateur, Rebelle, Sage, Innocent, Bouffon, Camarade, Protecteur. <strong>48 affirmations</strong>, une échelle à cinq crans, aucune bonne réponse.</p>
+    <p class="sous">Répondez sur la base de ce que vous faites réellement, pas de ce que vous voudriez faire. Comptez huit minutes.</p>
+    <hr class="filet">
+    <div class="barre-nav" style="margin-top:0">
+      <button class="bouton" id="demarrer">Commencer le test</button>
+    </div>
+    <p class="aide" style="display:block">Les douze fiches détaillées se débloquent à la fin du test, dépliables depuis le classement.</p>
+  </section>
+
+  <!-- TEST -->
+  <section id="test" class="cache">
+    <p class="compteur"><span id="pos">01 / 48</span><span id="pct">0 %</span></p>
+    <div class="jauge" id="jauge" role="group" aria-label="Progression, touchez un segment pour revoir une question"></div>
+    <div class="apercu cache" id="apercu">
+      <p class="ap-num" id="ap-num"></p>
+      <p class="ap-texte" id="ap-texte"></p>
+      <p class="ap-rep" id="ap-rep"></p>
+      <div class="ap-nav">
+        <button class="bouton" id="ap-aller">Modifier cette réponse</button>
+        <button class="bouton discret" id="ap-fermer">Fermer</button>
+      </div>
+    </div>
+    <p class="romain" id="numero">I</p>
+    <p class="question" id="enonce"></p>
+    <div class="echelle" id="echelle" role="group" aria-label="Niveau d'accord"></div>
+    <div class="barre-nav">
+      <button class="bouton discret" id="retour">Précédent</button>
+    </div>
+    <p class="aide">Le choix d'une réponse fait passer à la question suivante. Clavier : touches <b>1</b> à <b>5</b> pour répondre, <b>flèche gauche</b> pour corriger la précédente.</p>
+  </section>
+
+  <!-- RESULTATS -->
+  <section id="resultats" class="cache">
+    <button class="fab" id="fab-partage" aria-label="Partager mon résultat">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 8a3 3 0 1 0-2.8-4H15L8.9 7.6A3 3 0 1 0 6 12a3 3 0 0 0 2.9-2.4L15 13v.1a3 3 0 1 0 1.1-1.5L10 8.2a3 3 0 0 0 0-.4l6-3.5"/>
+      </svg>
+      <span>Partager</span>
+    </button>
+    <!-- Panneau de partage : deux options, rien d'autre -->
+    <div class="voile cache" id="voile">
+      <div class="feuille" role="dialog" aria-modal="true" aria-labelledby="fp-titre">
+        <p class="eyebrow" id="fp-titre">Partager mon résultat</p>
+        <button class="opt" type="button" id="opt-copier">
+          <span class="opt-t">Copier le texte</span>
+          <span class="opt-d">Met le résumé complet dans le presse-papiers : classement des douze figures, écarts, rareté, quadrants. À coller ensuite dans WhatsApp, un mail ou une note.</span>
+        </button>
+        <button class="opt" type="button" id="opt-pdf">
+          <span class="opt-t">Exporter en PDF</span>
+          <span class="opt-d" id="opt-pdf-aide"></span>
+        </button>
+        <button class="bouton discret" id="fp-fermer" style="width:100%;margin-top:4px">Fermer</button>
+      </div>
+    </div>
+    <p class="eyebrow">Votre blason</p>
+    <h1 id="titre-dominant" style="font-size:clamp(32px,9vw,58px)"></h1>
+    <p class="sous" id="resume-dominant"></p>
+    <svg class="dial" id="dial" viewBox="0 0 460 460" role="img" aria-label="Roue des douze archétypes"></svg>
+    <p class="avertissement" id="avertissement-echelle"></p>
+    <hr class="filet">
+    <p class="eyebrow">Vos quatre besoins fondamentaux</p>
+    <div id="quadrants"></div>
+    <p class="aide" id="quad-lecture" style="display:block;line-height:1.9;font-size:11px"></p>
+    <hr class="filet">
+    <p class="eyebrow">Triade dominante</p>
+    <div id="fiches"></div>
+    <p class="avertissement" id="rarete-triade"></p>
+    <details class="methode">
+      <summary>Comment l'indice de rareté est construit</summary>
+      <p>Il n'existe <b>aucune répartition de population publiée</b> pour les douze figures. Les travaux sur le PMAI fournissent des scores moyens par échelle, pas des fréquences de dominance. L'indice affiché ici est donc une <b>heuristique</b>, construite à partir de deux sources indirectes :</p>
+      <ul>
+        <li>les corrélations établies entre chaque échelle archétypale et les préférences de type psychologique, croisées avec la prévalence connue de ces types ;</li>
+        <li>la prévalence des combinaisons de traits Big Five que la figure suppose, une figure exigeant deux traits rares simultanément étant nécessairement moins fréquente.</li>
+      </ul>
+      <p>Les pourcentages affichés dans chaque fiche sont une <b>transposition de la forme de la distribution MBTI</b> sur 12 catégories, faute de données propres au modèle archétypal :</p>
+      <table class="tab-rar">
+        <tr><td>1/5</td><td>Très répandu</td><td>14 à 18 %</td></tr>
+        <tr><td>2/5</td><td>Répandu</td><td>10 à 13 %</td></tr>
+        <tr><td>3/5</td><td>Moyennement répandu</td><td>7 à 9 %</td></tr>
+        <tr><td>4/5</td><td>Rare</td><td>4 à 6 %</td></tr>
+        <tr><td>5/5</td><td>Très rare</td><td>2 à 4 %</td></tr>
+      </table>
+      <p>Base de l'analogie : sur 16 types MBTI, le plus fréquent atteint environ 12 à 13 % de la population et le plus rare environ 1,5 %, soit un rapport de 8 à 9 entre extrêmes. Ramené à 12 catégories dont la moyenne est de 8,3 %, cela donne la fourchette ci-dessus. <b>C'est une analogie de forme, pas une mesure.</b></p>
+      <p>Deux réserves de fond. D'abord, les chiffres MBTI proviennent d'échantillons majoritairement américains et la validité psychométrique du MBTI est elle-même contestée. Ensuite, et surtout, un type MBTI se veut stable alors que la figure dominante d'une personne évolue avec l'âge, le contexte et le stress : une répartition de population n'aurait donc pas de référent stable, même avec un échantillon parfait.</p>
+      <p>Enfin, une figure rare n'est ni meilleure ni plus valorisante : c'est seulement une configuration moins fréquente, avec l'isolement relatif que cela implique.</p>
+    </details>
+    <hr class="filet">
+    <p class="eyebrow">Vos douze figures</p>
+    <p class="aide" style="display:block;margin-bottom:14px">Touchez une ligne pour déplier la fiche complète.</p>
+    <div class="accordeon" id="classement"></div>
+    <div class="barre-nav" style="margin-top:14px">
+      <button class="bouton discret" id="tout-deplier">Tout déplier</button>
+      <button class="bouton discret" id="tout-replier">Tout replier</button>
+    </div>
+    <p class="aide" id="lecture-ecart" style="display:block;line-height:1.9;font-size:11px"></p>
+    <hr class="filet">
+    <section id="bloc-partage">
+      <p class="eyebrow">Partager et exporter</p>
+      <div class="barre-nav" style="margin-top:0">
+        <button class="bouton" id="partager">Partager mon résultat</button>
+        <button class="bouton discret" id="partager-test">Envoyer le test à quelqu'un</button>
+      </div>
+      <div class="barre-nav" style="margin-top:10px">
+        <button class="bouton discret" id="modifier">Modifier mes réponses</button>
+        <button class="bouton discret" id="refaire">Recommencer</button>
+      </div>
+      <div class="avertissement cache" id="note-partage"></div>
+      <div id="secours" class="cache">
+        <p class="aide" style="display:block">Copie automatique bloquée par le navigateur. Sélectionnez le texte ci-dessous.</p>
+        <textarea id="secours-txt" rows="16"></textarea>
+      </div>
+    </section>
+    <hr class="filet">
+    <details class="methode" id="bloc-biblio">
+      <summary>Bibliographie et sources de référence</summary>
+      <p>Sources qui font référence pour ce modèle. Ce test n'en est qu'une adaptation libre, sans lien avec leurs auteurs ni leurs éditeurs.</p>
+      <div class="biblio">
+      <h4>Fondation théorique</h4>
+      <ul>
+        <li>Jung, C. G. (1921). <i>Psychologische Typen</i>. Traduction française : <i>Types psychologiques</i>. Repris dans <i>Collected Works</i>, vol. 6.</li>
+        <li>Jung, C. G. (1968). <i>The Archetypes and the Collective Unconscious</i>, <i>Collected Works</i>, vol. 9 partie I, 2<sup>e</sup> éd. Princeton University Press. Traduction française : <i>Les Racines de la conscience</i>.
+        <span class="biblio-note">Jung n'a jamais arrêté de liste de douze. Cette systématisation est postérieure.</span></li>
+      </ul>
+      <h4>Le modèle des douze figures</h4>
+      <ul>
+        <li>Pearson, C. S. (1986). <i>The Hero Within: Six Archetypes We Live By</i>. Harper &amp; Row.</li>
+        <li>Pearson, C. S. (1991). <i>Awakening the Heroes Within: Twelve Archetypes to Help Us Find Ourselves and Transform Our World</i>. HarperSanFrancisco.
+        <span class="biblio-note">Ouvrage fondateur du système à douze figures.</span></li>
+        <li>Mark, M. &amp; Pearson, C. S. (2001). <i>The Hero and the Outlaw: Building Extraordinary Brands Through the Power of Archetypes</i>. McGraw-Hill.
+        <span class="biblio-note">Source de la roue, des quatre quadrants et des noms « marque ».</span></li>
+      </ul>
+      <h4>L'instrument et sa validation</h4>
+      <ul>
+        <li>Pearson, C. S. &amp; Marr, H. K. (2002). <i>Introduction to Archetypes: A Companion for Understanding and Using the Pearson-Marr Archetype Indicator</i>. Center for Applications of Psychological Type, Gainesville.</li>
+        <li>Pearson, C. S. &amp; Marr, H. K. (2007). <i>What Story Are You Living? A Workbook and Guide to Interpreting Results from the PMAI Instrument</i>. CAPT.</li>
+        <li>McPeek, R. W. (2008). The Pearson-Marr Archetype Indicator and psychological type. <i>Journal of Psychological Type</i>, vol. 68, n° 7.
+        <span class="biblio-note">Corrélations entre les 12 échelles et les types psychologiques : c'est la source dont dérive l'indice de rareté.</span>
+        <a href="https://www.researchgate.net/publication/216101940_The_Pearson-Marr_Archetype_Indicator_and_psychological_type" target="_blank" rel="noopener">Consulter</a></li>
+      </ul>
+      <h4>Cadre masculin distinct, souvent confondu</h4>
+      <ul>
+        <li>Moore, R. &amp; Gillette, D. (1990). <i>King, Warrior, Magician, Lover: Rediscovering the Archetypes of the Mature Masculine</i>. HarperOne.
+        <span class="biblio-note">Quatre figures seulement, sans Créateur. C'est ce cadre qui est spécifiquement masculin, pas celui des douze.</span></li>
+      </ul>
+      <h4>Sources officielles en ligne</h4>
+      <ul>
+        <li><a href="https://carolspearson.com/books-page/the-pearson-marr-archetype-indicator-r-pmai-r" target="_blank" rel="noopener">carolspearson.com</a> : site de l'autrice du modèle.</li>
+        <li><a href="https://www.storywell.com/articles/archetypes-and-personality-type-pmai-mbti.htm" target="_blank" rel="noopener">storywell.com</a> : plateforme officielle de passation du PMAI, éditée par le CAPT.</li>
+      </ul>
+    </div>
+    </details>
+    <p class="note">Cet outil est un support de réflexion, pas un instrument psychométrique validé. Les scores bas ne sont pas des défauts : un archétype faible signale surtout une énergie peu sollicitée, parfois une ressource à réactiver. Regardez la colonne « ombre » de vos trois dominants, c'est généralement là que se trouve l'information utile.</p>
+  </section>
+</main>
+
+<script>
+const ARCH = [
+  {id:"sou",nom:"Le Souverain",abbr:"SOU",devise:"Ordonner ce qui doit durer.",
+   moteur:"Le contrôle, la responsabilité du tout, la construction d'un ordre stable.",
+   peur:"Le chaos, la perte d'autorité, être renversé.",
+   force:"Vision longue, arbitrage, capacité à porter le collectif.",
+   ombre:"Rigidité, tyrannie douce, incapacité à déléguer vraiment.",
+   levier:"Distinguer gouverner et tenir. Confier un périmètre entier, pas des tâches.",
+   q:["Quand rien n'est cadré, je prends naturellement la main.",
+      "J'ai besoin de voir loin et de poser un ordre qui tienne dans le temps.",
+      "Je supporte mal le désordre et l'improvisation prolongée.",
+      "Je me sens responsable du résultat collectif, même hors de mon périmètre."]},
+  {id:"mag",nom:"Le Magicien",abbr:"MAG",devise:"Changer l'état des choses.",
+   moteur:"Comprendre les lois cachées d'un système pour le transformer.",
+   peur:"Les conséquences non maîtrisées de son propre pouvoir.",
+   force:"Lecture systémique, effet de levier, capacité de transformation.",
+   ombre:"Manipulation, opacité, ésotérisme qui exclut les autres.",
+   levier:"Rendre explicite ce que vous voyez. Le pouvoir partagé reste du pouvoir.",
+   q:["Je vois des liens entre des choses que les autres traitent séparément.",
+      "J'aime transformer une situation en actionnant un seul levier bien choisi.",
+      "On me dit que je rends possible ce qui semblait bloqué.",
+      "Je m'intéresse autant au visible qu'aux mécanismes qui le produisent."]},
+  {id:"cre",nom:"Le Créateur",abbr:"CRÉ",devise:"Donner forme.",
+   moteur:"Faire exister quelque chose qui n'existait pas, avec une forme juste.",
+   peur:"La médiocrité, la banalité, l'inachevé.",
+   force:"Imagination appliquée, exigence de forme, productivité intrinsèque.",
+   ombre:"Perfectionnisme paralysant, projets abandonnés à 80 %.",
+   levier:"Livrer imparfait à date fixe. La sortie fait partie de l'œuvre.",
+   q:["Une idée non réalisée me met mal à l'aise.",
+      "Je fabrique, j'écris ou je construis, y compris sans commande.",
+      "La forme finale me préoccupe autant que la fonction.",
+      "Je préfère créer quelque chose d'imparfait que copier quelque chose de propre."]},
+  {id:"ama",nom:"L'Amant",abbr:"AMA",devise:"Ce qui compte, c'est le lien.",
+   moteur:"L'intensité relationnelle, la beauté, la sensation, l'engagement.",
+   peur:"Ne pas être choisi, être seul, être indifférent aux autres.",
+   force:"Loyauté, goût, présence, capacité d'attachement profond.",
+   ombre:"Dépendance affective, perte de soi dans l'autre, jalousie.",
+   levier:"Alimenter une source d'estime qui ne dépend pas du regard d'un autre.",
+   q:["La qualité de mes relations proches détermine mon énergie du jour.",
+      "Je soigne l'esthétique et la sensation des choses que je fabrique.",
+      "Je m'engage intensément, avec peu de personnes.",
+      "Être choisi compte autant pour moi que réussir."]},
+  {id:"her",nom:"Le Héros",abbr:"HÉR",devise:"Il y a toujours un chemin.",
+   moteur:"Se prouver par l'épreuve, gagner, tenir quand les autres lâchent.",
+   peur:"La faiblesse, l'échec public, l'insignifiance.",
+   force:"Courage, endurance, exécution sous pression.",
+   ombre:"Arrogance, combat permanent, épuisement, adversaires inventés.",
+   levier:"Choisir vos batailles. Toutes les collines ne valent pas un assaut.",
+   q:["Un obstacle me donne plus d'énergie qu'il ne m'en enlève.",
+      "Je me porte volontaire quand la situation est difficile.",
+      "J'ai besoin de mesurer ma progression contre un objectif dur.",
+      "Renoncer me coûte plus cher que perdre."]},
+  {id:"exp",nom:"L'Explorateur",abbr:"EXP",devise:"Ne m'enfermez pas.",
+   moteur:"L'autonomie, la nouveauté, la découverte de son propre territoire.",
+   peur:"L'enfermement, le vide intérieur, le conformisme.",
+   force:"Indépendance, curiosité, tolérance à l'inconnu.",
+   ombre:"Fuite, incapacité à s'ancrer, inachèvement chronique.",
+   levier:"Chercher la profondeur comme nouvelle frontière plutôt que le déplacement.",
+   q:["La routine, même confortable, finit par m'étouffer.",
+      "Je pars volontiers seul, sans itinéraire arrêté.",
+      "Je change de contexte dès que je sens que j'ai fait le tour.",
+      "L'inconnu m'attire plus qu'il ne m'inquiète."]},
+  {id:"reb",nom:"Le Rebelle",abbr:"REB",devise:"Ce qui ne marche pas doit tomber.",
+   moteur:"Rompre avec ce qui est faux, périmé ou injuste.",
+   peur:"L'impuissance, la compromission, être absorbé par le système.",
+   force:"Lucidité, courage de dire, capacité à provoquer la rupture nécessaire.",
+   ombre:"Destruction gratuite, opposition réflexe, isolement.",
+   levier:"Après la démolition, proposer. Sinon vous restez un coût pour les autres.",
+   q:["Une règle que personne ne sait justifier, je la contourne.",
+      "Je prends du plaisir à démonter un système qui ne fonctionne plus.",
+      "Je dis à voix haute ce que les autres pensent tout bas.",
+      "L'autorité ne m'impressionne pas par sa seule position."]},
+  {id:"sag",nom:"Le Sage",abbr:"SAG",devise:"Comprendre avant d'agir.",
+   moteur:"La vérité, la compréhension juste, l'indépendance de jugement.",
+   peur:"Se tromper, être dupe, agir sans savoir.",
+   force:"Analyse, recul, discernement, fiabilité intellectuelle.",
+   ombre:"Paralysie analytique, condescendance, spectateur de sa propre vie.",
+   levier:"Vous fixer un seuil de connaissance suffisant, puis engager.",
+   q:["Avant d'agir, j'ai besoin de comprendre le mécanisme en profondeur.",
+      "Je juge une idée sur la qualité de ses preuves, pas sur son auteur.",
+      "Je passe volontiers du temps à apprendre sans objectif immédiat.",
+      "On me consulte pour trancher des questions complexes."]},
+  {id:"inn",nom:"L'Innocent",abbr:"INN",devise:"Le monde peut être bon.",
+   moteur:"La confiance, la simplicité, la fidélité à des valeurs claires.",
+   peur:"Être puni, faire mal, découvrir que tout est corrompu.",
+   force:"Intégrité, capacité de renouveau, effet apaisant sur les autres.",
+   ombre:"Déni, naïveté, dépendance à ceux qui décident pour vous.",
+   levier:"Regarder les faits désagréables sans perdre votre confiance de fond.",
+   q:["Je préfère croire en la bonne foi des gens jusqu'à preuve du contraire.",
+      "J'ai besoin de sentir que ce que je fais a un sens simple et juste.",
+      "Les environnements cyniques m'épuisent plus qu'ils ne me stimulent.",
+      "Je garde une forme d'optimisme même quand les faits sont mauvais."]},
+  {id:"bou",nom:"Le Bouffon",abbr:"BOU",devise:"On ne vit qu'une fois.",
+   moteur:"Le présent, le jeu, la vérité qui passe par le rire.",
+   peur:"L'ennui, la lourdeur, être un poids pour les autres.",
+   force:"Désamorçage, franc-parler toléré, énergie de groupe.",
+   ombre:"Évitement par la blague, refus de la gravité, superficialité.",
+   levier:"Rester dans une conversation difficile sans sortir la vanne.",
+   q:["Je désamorce la tension par l'humour, presque par réflexe.",
+      "Je préfère une vérité dite en riant qu'un discours solennel.",
+      "Je me méfie des gens qui se prennent trop au sérieux.",
+      "Je trouve du jeu même dans les moments contraints."]},
+  {id:"cam",nom:"Le Camarade",abbr:"CAM",devise:"Personne au-dessus.",
+   moteur:"L'appartenance, l'égalité réelle, la solidarité ordinaire.",
+   peur:"L'exclusion, se distinguer, être jugé prétentieux.",
+   force:"Accessibilité, sens du terrain, ciment social.",
+   ombre:"Effacement, conformisme, renoncement à son talent propre.",
+   levier:"Accepter de prendre une place visible. Ce n'est pas une trahison du groupe.",
+   q:["Je me sens mal à l'aise quand on me met sur un piédestal.",
+      "Je crée du lien facilement avec n'importe quel milieu.",
+      "Je préfère la solution qui marche pour tout le monde à la solution brillante.",
+      "L'appartenance à un groupe compte plus pour moi que le statut."]},
+  {id:"pro",nom:"Le Protecteur",abbr:"PRO",devise:"Je tiens la porte.",
+   moteur:"Prendre soin, protéger, être utile à ceux dont il a la charge.",
+   peur:"L'égoïsme, l'ingratitude, être inutile.",
+   force:"Fiabilité, générosité, vigilance sur les plus fragiles.",
+   ombre:"Martyre, contrôle déguisé en soin, épuisement silencieux.",
+   levier:"Formuler vos besoins avant d'être à sec. Demander n'est pas faillir.",
+   q:["Je repère avant les autres celui qui décroche.",
+      "Je donne facilement mon temps, parfois au détriment du mien.",
+      "Protéger les gens dont j'ai la charge passe avant ma propre visibilité.",
+      "J'ai du mal à demander de l'aide pour moi."]}
+];
+
+/* ---- Dénominations originales ----
+   EN      : nom anglais courant (version « marque », Mark & Pearson 2001)
+   EN_PMAI : nom employé dans l'instrument PMAI (Pearson 1991) quand il diffère */
+const EN={inn:"Innocent",cam:"Everyman",her:"Hero",pro:"Caregiver",
+          exp:"Explorer",ama:"Lover",cre:"Creator",reb:"Outlaw",
+          sou:"Ruler",mag:"Magician",sag:"Sage",bou:"Jester"};
+const EN_PMAI={cam:"Orphan",her:"Warrior",exp:"Seeker",reb:"Destroyer"};
+
+/* Ordres de grandeur associés à chaque niveau de rareté.
+   Transposition de la forme de la distribution MBTI sur 12 catégories.
+   Aucune donnée archétypale directe : indicatif uniquement. */
+const PCT_RARETE=["14 à 18 %","10 à 13 %","7 à 9 %","4 à 6 %","2 à 4 %"];
+
+/* ---- Quadrants : les quatre désirs fondamentaux (Mark & Pearson) ----
+   [quadrant, désir servi, motivation propre à la figure] */
+const QUADRANT={
+  exp:["Individualité","Explorer sa spiritualité","Liberté"],
+  sag:["Individualité","Explorer sa spiritualité","Compréhension"],
+  inn:["Individualité","Explorer sa spiritualité","Sécurité"],
+  reb:["Maîtrise","Laisser son empreinte","Libération"],
+  mag:["Maîtrise","Laisser son empreinte","Pouvoir"],
+  her:["Maîtrise","Laisser son empreinte","Maîtrise de soi"],
+  ama:["Appartenance","Se connecter aux autres","Intimité"],
+  bou:["Appartenance","Se connecter aux autres","Plaisir"],
+  cam:["Appartenance","Se connecter aux autres","Appartenance"],
+  cre:["Stabilité","Fournir une structure","Innovation"],
+  sou:["Stabilité","Fournir une structure","Contrôle"],
+  pro:["Stabilité","Fournir une structure","Service"]
+};
+const ORDRE_QUAD=["Individualité","Maîtrise","Appartenance","Stabilité"];
+/* Sens horaire depuis le haut, trois figures par quadrant.
+   Reproduit la disposition de la roue de référence. */
+const ORDRE_ROUE=["reb","mag","her","ama","bou","cam","pro","sou","cre","inn","sag","exp"];
+const QUAD_ROUE=[
+  {nom:"Maîtrise",      d0:0},
+  {nom:"Appartenance",  d0:90},
+  {nom:"Stabilité",     d0:180},
+  {nom:"Individualité", d0:270}
+];
+const DESIR_QUAD={
+  "Individualité":"Explorer sa spiritualité",
+  "Maîtrise":"Laisser son empreinte",
+  "Appartenance":"Se connecter aux autres",
+  "Stabilité":"Fournir une structure"
+};
+const TEINTE_QUAD={
+  "Individualité":"#4E8C7D","Maîtrise":"#C9A227",
+  "Appartenance":"#B4626C","Stabilité":"#5B84BD"
+};
+/* Noms employés dans la déclinaison marque du même modèle */
+const ALIAS={ama:"Le Séducteur",bou:"L'Amuseur",cam:"Le Citoyen",
+             pro:"L'Ange-gardien",sou:"Le Dirigeant"};
+
+/* ---- Indice de rareté (1 très répandu -> 5 très rare) ----
+   Heuristique dérivée de données adjacentes, pas d'une mesure directe :
+   prévalence des profils de type et de traits corrélés à chaque archétype
+   dans les études PMAI/MBTI et dans les distributions Big Five.
+   À lire comme un ordre de grandeur, pas comme une statistique. */
+const RARETE={
+  cam:[1,"Repose sur une agréabilité élevée et un faible besoin de distinction, la combinaison la plus fréquente en population générale."],
+  pro:[1,"Corrélé aux types dominants en Sentiment extraverti (ESFJ, ENFJ), très représentés, et socialement fortement encouragé."],
+  her:[2,"Conscienciosité et orientation résultat sont répandues ; c'est la dominance exclusive de cette figure qui est moins fréquente."],
+  inn:[2,"Fréquent, avec deux pics de prévalence : début de vie adulte et grand âge."],
+  sou:[3,"Demande conscienciosité, préférence Jugement et motif de statut réunis ; fréquent en position de direction, moyen en population générale."],
+  ama:[3,"Sensibilité relationnelle et esthétique très répandues, mais rarement au premier rang du profil."],
+  bou:[3,"Extraversion élevée associée à une faible gravité ; fréquent comme trait, moyen comme figure dominante."],
+  sag:[4,"Associé aux types Intuition + Pensée introvertis, minoritaires, et à un besoin de cognition élevé."],
+  exp:[4,"Exige une ouverture forte combinée à un faible besoin d'appartenance, association peu commune."],
+  reb:[4,"Suppose une faible agréabilité avec une ouverture forte, combinaison rare et socialement pénalisée."],
+  cre:[4,"Corrélé aux dominantes Intuition (ENFP, ENTP), minoritaires, et suppose une discipline de production en plus de l'imagination."],
+  mag:[5,"Exige simultanément vision systémique, ouverture élevée et efficacité pratique ; c'est la conjonction la plus rare des douze."]
+};
+const LIB_RARETE=["Très répandu","Répandu","Moyennement répandu","Rare","Très rare"];
+function pips(n){
+  let h="";
+  for(let i=1;i<=5;i++) h+=`<i class="pip${i<=n?" on":""}"></i>`;
+  return `<span class="pips" aria-label="rareté ${n} sur 5">${h}</span>`;
+}
+
+const LIB = [
+  {c:"1",t:"Pas du tout moi"},
+  {c:"2",t:"Un peu"},
+  {c:"3",t:"Moyennement"},
+  {c:"4",t:"Beaucoup"},
+  {c:"5",t:"Tout à fait moi"}
+];
+const ROM=["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX","XXI","XXII","XXIII","XXIV","XXV","XXVI","XXVII","XXVIII","XXIX","XXX","XXXI","XXXII","XXXIII","XXXIV","XXXV","XXXVI","XXXVII","XXXVIII","XXXIX","XL","XLI","XLII","XLIII","XLIV","XLV","XLVI","XLVII","XLVIII"];
+
+// Ordre entrelacé déterministe : évite d'enchaîner les items d'un même archétype
+const ITEMS=[];
+for(let r=0;r<4;r++){
+  for(let a=0;a<12;a++){
+    const idx=(a*5+r*7)%12;
+    ITEMS.push({arch:idx,item:r,texte:ARCH[idx].q[r]});
+  }
+}
+const TOTAL=ITEMS.length;
+let curseur=0;
+const reponses=new Array(TOTAL).fill(null);
+
+const $=s=>document.querySelector(s);
+const accueil=$("#accueil"), test=$("#test"), res=$("#resultats");
+
+$("#jauge").innerHTML=ITEMS.map((it,i)=>
+  `<button type="button" class="tk" data-i="${i}" aria-label="Question ${i+1}"></button>`).join("");
+const ticks=[...document.querySelectorAll("#jauge .tk")];
+let maxAtteint=0;
+
+/* ---- Aperçu d'une question depuis la frise ---- */
+function ouvrirApercu(i){
+  if(i>maxAtteint) return;
+  const rep=reponses[i];
+  $("#ap-num").textContent=`Question ${i+1} sur ${TOTAL}`;
+  $("#ap-texte").textContent=ITEMS[i].texte;
+  $("#ap-rep").innerHTML = rep!==null
+    ? `Réponse donnée : <b>${rep} · ${LIB[rep-1].t}</b>`
+    : `<b>Pas encore répondu.</b>`;
+  $("#apercu").dataset.cible=i;
+  $("#apercu").classList.remove("cache");
+  ticks.forEach(t=>t.classList.toggle("vue",+t.dataset.i===i));
+}
+function fermerApercu(){
+  $("#apercu").classList.add("cache");
+  ticks.forEach(t=>t.classList.remove("vue"));
+}
+ticks.forEach(b=>b.addEventListener("click",()=>ouvrirApercu(+b.dataset.i)));
+$("#ap-fermer").addEventListener("click",fermerApercu);
+$("#ap-aller").addEventListener("click",()=>{
+  const i=+$("#apercu").dataset.cible;
+  fermerApercu();
+  curseur=i;
+  afficheQuestion();
+});
+
+$("#echelle").innerHTML=LIB.map((l,i)=>
+  `<button class="choix" data-v="${i+1}" aria-pressed="false"><span class="cote">${l.c}</span><span class="lib">${l.t}</span></button>`
+).join("");
+
+function afficheQuestion(){
+  const it=ITEMS[curseur];
+  $("#numero").textContent=ROM[curseur];
+  $("#enonce").textContent=it.texte;
+  $("#pos").textContent=String(curseur+1).padStart(2,"0")+" / "+TOTAL;
+  $("#pct").textContent=Math.round(curseur/TOTAL*100)+" %";
+  maxAtteint=Math.max(maxAtteint,curseur);
+  ticks.forEach((t,i)=>{
+    t.classList.toggle("faite",reponses[i]!==null);
+    t.classList.toggle("courante",i===curseur);
+    t.disabled = i>maxAtteint;
+    t.setAttribute("aria-label",
+      `Question ${i+1}${reponses[i]!==null?", répondu "+reponses[i]+" sur 5":", sans réponse"}`);
+  });
+  fermerApercu();
+  document.querySelectorAll(".choix").forEach(b=>
+    b.setAttribute("aria-pressed", String(Number(b.dataset.v)===reponses[curseur]))
+  );
+  $("#retour").style.visibility = curseur===0 ? "hidden" : "visible";
+}
+
+let verrou=false;
+
+function choisir(v){
+  if(verrou) return;
+  reponses[curseur]=v;
+  ticks[curseur].classList.add("faite");
+  document.querySelectorAll(".choix").forEach(b=>
+    b.setAttribute("aria-pressed", String(Number(b.dataset.v)===v))
+  );
+  // brève pause pour que la sélection soit visible avant de passer
+  verrou=true;
+  setTimeout(()=>{verrou=false;avancer();},170);
+}
+function avancer(){
+  if(reponses[curseur]===null) return;
+  if(curseur<TOTAL-1){curseur++;afficheQuestion();}
+  else{calcule();}
+}
+function reculer(){if(curseur>0){curseur--;afficheQuestion();}}
+
+document.querySelectorAll(".choix").forEach(b=>{
+  b.addEventListener("click",()=>{b.blur();choisir(Number(b.dataset.v));});
+});
+$("#retour").addEventListener("click",reculer);
+
+/* Retour au questionnaire depuis les résultats, réponses conservées */
+$("#modifier").addEventListener("click",()=>{
+  res.classList.add("cache");
+  $("#secours").classList.add("cache");
+  test.classList.remove("cache");
+  curseur=TOTAL-1;
+  afficheQuestion();
+  window.scrollTo(0,0);
+});
+
+document.addEventListener("keydown",e=>{
+  if(test.classList.contains("cache")) return;
+  if(e.key==="Escape"){fermerApercu();return;}
+  if(e.target.closest&&e.target.closest("#jauge,#apercu")) return;
+  if(e.key>="1"&&e.key<="5"){choisir(Number(e.key));e.preventDefault();return;}
+  if(e.key==="ArrowLeft"){reculer();e.preventDefault();return;}
+  if(e.key==="ArrowRight"){avancer();e.preventDefault();}
+});
+
+$("#demarrer").addEventListener("click",()=>{
+  accueil.classList.add("cache");test.classList.remove("cache");afficheQuestion();
+  window.scrollTo(0,0);
+});
+$("#refaire").addEventListener("click",()=>{
+  reponses.fill(null);curseur=0;classement=[];maxAtteint=0;fermerApercu();
+  $("#secours").classList.add("cache");
+  res.classList.add("cache");accueil.classList.remove("cache");window.scrollTo(0,0);
+});
+
+let classement=[];
+let moyenne=0;
+let quadrants=[];
+
+function calcule(){
+  const brut=ARCH.map(()=>0);
+  ITEMS.forEach((it,i)=>{brut[it.arch]+=(reponses[i]||1);});
+  classement=ARCH.map((a,i)=>({...a,pct:Math.round((brut[i]-4)/16*100)}))
+                 .sort((x,y)=>y.pct-x.pct);
+  moyenne=Math.round(classement.reduce((s,a)=>s+a.pct,0)/classement.length);
+  classement.forEach(a=>a.ecart=a.pct-moyenne);
+  quadrants=ORDRE_QUAD.map(q=>{
+    const m=classement.filter(a=>QUADRANT[a.id][0]===q);
+    return {nom:q,desir:DESIR_QUAD[q],
+            pct:Math.round(m.reduce((t,a)=>t+a.pct,0)/m.length),
+            figures:m.map(a=>a.nom.replace(/^(Le |L'|La )/,""))};
+  }).sort((x,y)=>y.pct-x.pct);
+  test.classList.add("cache");res.classList.remove("cache");
+  rendResultats();window.scrollTo(0,0);
+}
+
+function rendResultats(){
+  const d=classement[0];
+  $("#titre-dominant").innerHTML=d.nom.replace(/^(Le |L'|La )/,"$1<em>")+"</em>";
+  $("#resume-dominant").innerHTML=`Figure dominante, intensité <strong>${d.pct}/100</strong>. ${d.moteur} Suivie du ${classement[1].nom.replace(/^(Le |L'|La )/,"").toLowerCase()} (${classement[1].pct}) et du ${classement[2].nom.replace(/^(Le |L'|La )/,"").toLowerCase()} (${classement[2].pct}).`;
+  $("#avertissement-echelle").innerHTML=`<strong>Comment lire ces nombres.</strong> Il s'agit de douze échelles indépendantes, pas d'un camembert. Chaque figure est notée de 0 à 100 uniquement d'après vos 4 réponses la concernant : 100 signifie « tout à fait moi » aux quatre items, 0 signifie « pas du tout moi » aux quatre. Additionner les douze n'a aucun sens, et le total peut aller de 0 à 1200. Ce qui compte est le classement et l'écart, pas le niveau absolu.`;
+
+  dessineDial();
+
+  $("#quadrants").innerHTML=quadrants.map((q,i)=>`
+    <div class="quad" style="--t:${TEINTE_QUAD[q.nom]}">
+      <div class="quad-tete">
+        <span class="quad-rang">${i+1}<sup>${i?"e":"er"}</sup></span>
+        <span class="quad-val">${q.pct}<span class="quad-cent">/100</span></span>
+      </div>
+      <h4 class="quad-nom">${q.nom}</h4>
+      <p class="quad-desir">${q.desir}</p>
+      <div class="quad-barre"><i style="width:${Math.max(q.pct,2)}%"></i></div>
+      <p class="quad-fig">${q.figures.join(" · ")}</p>
+    </div>`).join("");
+  $("#quad-lecture").innerHTML=`Chaque quadrant regroupe trois figures voisines et son score est leur moyenne. Sur la roue ci-dessus, ce sont les <strong>quatre arcs colorés de l'anneau extérieur</strong>, remplis à proportion de leur score, et chaque part intérieure reprend la couleur de son quadrant. Le vôtre le plus servi est <strong>${quadrants[0].nom.toLowerCase()}</strong>, le moins servi <strong>${quadrants[3].nom.toLowerCase()}</strong>. Moyenner trois échelles réduit le bruit : cette orientation est plus stable dans le temps que le classement figure par figure.`;
+
+  $("#fiches").innerHTML=classement.slice(0,3).map(ficheHTML).join("");
+  const rTriade=classement.slice(0,3).reduce((t,a)=>t+RARETE[a.id][0],0)/3;
+  const qualif = rTriade>=4 ? "combinaison peu commune"
+               : rTriade>=3 ? "combinaison intermédiaire"
+               : "combinaison courante";
+  $("#rarete-triade").innerHTML=`Rareté moyenne de votre triade : <strong>${rTriade.toFixed(1).replace(".",",")} sur 5</strong>, soit une ${qualif}. Indicatif seulement, voir la méthode ci-dessous.`;
+
+  $("#classement").innerHTML=
+    `<div class="lg-entete">
+      <span class="mq"></span><span class="lg-rang"></span><span class="lg-nom">Figure</span>
+      <span class="lg-trace"></span><span class="lg-val">Int.</span>
+      <span class="lg-val">Écart</span><span class="lg-rar">Rareté</span>
+    </div>`+classement.map(ligneHTML).join("");
+  $("#lecture-ecart").innerHTML=`Votre moyenne personnelle est de <strong>${moyenne}/100</strong>. La colonne Écart indique les points au-dessus ou en dessous de cette moyenne : c'est elle qui différencie réellement votre profil, pas l'intensité brute. Un écart supérieur à +12 signale une figure vraiment structurante, un écart inférieur à -12 une énergie peu sollicitée.`;
+}
+
+function dessineDial(){
+  const cx=230, cy=230;
+  const rin=50, rmax=138, rlab=152, rq=168, rtxt=198;
+  const parId={}; classement.forEach(a=>parId[a.id]=a);
+  const parQuad={}; quadrants.forEach(q=>parQuad[q.nom]=q);
+  const roue=ORDRE_ROUE.map(id=>parId[id]);
+
+  // deg 0 = haut, sens horaire
+  const pol=(r,deg)=>{const a=(deg-90)*Math.PI/180;
+    return (cx+r*Math.cos(a)).toFixed(1)+","+(cy+r*Math.sin(a)).toFixed(1);};
+  const secteur=(rI,rO,d0,d1)=>
+    `M ${pol(rI,d0)} A ${rI} ${rI} 0 0 1 ${pol(rI,d1)} L ${pol(rO,d1)} A ${rO} ${rO} 0 0 0 ${pol(rO,d0)} Z`;
+  const arc=(r,d0,d1)=>`M ${pol(r,d0)} A ${r} ${r} 0 ${d1-d0>180?1:0} 1 ${pol(r,d1)}`;
+
+  let g="";
+
+  // dégradés, un par quadrant
+  g+="<defs>"+ORDRE_QUAD.map((q,i)=>
+    `<radialGradient id="gq${i}" cx="50%" cy="50%" r="50%">
+       <stop offset="0%" stop-color="${TEINTE_QUAD[q]}" stop-opacity=".45"/>
+       <stop offset="100%" stop-color="${TEINTE_QUAD[q]}" stop-opacity="1"/>
+     </radialGradient>`).join("")+"</defs>";
+
+  // cercles de graduation
+  [25,50,75,100].forEach(pc=>{
+    g+=`<circle cx="${cx}" cy="${cy}" r="${rin+(rmax-rin)*pc/100}" fill="none"
+        stroke="rgba(237,232,220,.09)" stroke-width="1"/>`;
+  });
+
+  // douze secteurs : piste complète en fond, puis barre proportionnelle
+  roue.forEach((a,i)=>{
+    const d0=i*30+1.2, d1=(i+1)*30-1.2;
+    const q=QUADRANT[a.id][0], gi=ORDRE_QUAD.indexOf(q);
+    const ro=rin+(rmax-rin)*Math.max(a.pct,1.5)/100;
+    g+=`<path d="${secteur(rin,rmax,d0,d1)}" fill="rgba(237,232,220,.05)"/>`;
+    g+=`<path class="secteur" data-i="${i}" tabindex="0" role="button"
+         aria-label="${a.nom}, intensité ${a.pct} sur 100, quadrant ${q}"
+         d="${secteur(rin,ro,d0,d1)}" fill="url(#gq${gi})"
+         stroke="rgba(11,16,39,.55)" stroke-width="1"/>`;
+    // abréviation de la figure
+    const [lx,ly]=pol(rlab,i*30+15).split(",");
+    g+=`<text x="${lx}" y="${ly}" dy="0.35em" text-anchor="middle"
+         class="d-abbr" fill="${a.pct>=classement[2].pct?"#E3C766":"#A9A79C"}">${a.abbr}</text>`;
+  });
+
+  // séparateurs de quadrants
+  [0,90,180,270].forEach(d=>{
+    g+=`<line x1="${pol(rin,d).split(",")[0]}" y1="${pol(rin,d).split(",")[1]}"
+         x2="${pol(rq+9,d).split(",")[0]}" y2="${pol(rq+9,d).split(",")[1]}"
+         stroke="rgba(201,162,39,.35)" stroke-width="1"/>`;
+  });
+
+  // anneau extérieur : une jauge de 90° par quadrant
+  QUAD_ROUE.forEach(qr=>{
+    const q=parQuad[qr.nom], t=TEINTE_QUAD[qr.nom];
+    const d0=qr.d0+2, d1=qr.d0+88;
+    g+=`<path d="${arc(rq,d0,d1)}" fill="none" stroke="${t}" stroke-opacity=".22" stroke-width="11"/>`;
+    g+=`<path d="${arc(rq,d0,d0+(d1-d0)*q.pct/100)}" fill="none" stroke="${t}"
+         stroke-width="11" stroke-linecap="butt"/>`;
+    // étiquette horizontale à l'extérieur, toujours lisible
+    const mid=qr.d0+45, droite=mid<180;
+    const [tx,ty]=pol(rtxt,mid).split(",");
+    g+=`<text x="${tx}" y="${+ty-5}" text-anchor="${droite?"start":"end"}"
+         fill="${t}" class="q-lib">${qr.nom.toUpperCase()}</text>`;
+    g+=`<text x="${tx}" y="${+ty+10}" text-anchor="${droite?"start":"end"}"
+         fill="#A9A79C" class="q-val">${q.pct}/100</text>`;
+  });
+
+  // pastille centrale
+  g+=`<circle class="d-pastille" cx="${cx}" cy="${cy}" r="${rin-9}" fill="rgba(11,16,39,.65)"
+       stroke="rgba(201,162,39,.4)" stroke-width="1"/>
+    <text id="centre-abbr" x="${cx}" y="${cy-6}" text-anchor="middle" fill="#E3C766"
+      style="font-family:var(--display);font-size:17px">${classement[0].abbr}</text>
+    <text id="centre-pct" x="${cx}" y="${cy+12}" text-anchor="middle" fill="#A9A79C"
+      style="font-size:11px">${classement[0].pct}/100</text>`;
+
+  $("#dial").innerHTML=g;
+  $("#dial").querySelectorAll(".secteur").forEach(el=>{
+    const maj=()=>{
+      const a=roue[+el.dataset.i];
+      $("#centre-abbr").textContent=a.abbr;
+      $("#centre-pct").textContent=a.pct+"/100";
+    };
+    ["mouseenter","click","focus"].forEach(ev=>el.addEventListener(ev,maj));
+  });
+}
+
+const rangs=["","deux","trois"];
+
+/* Corps commun aux fiches de la triade et aux lignes dépliables */
+function corpsHTML(a){
+  const r=RARETE[a.id][0];
+  return `<p class="devise">« ${a.devise} »</p>
+      <dl>
+        <dt>Moteur</dt><dd>${a.moteur}</dd>
+        <dt>Peur</dt><dd>${a.peur}</dd>
+        <dt>Lumière</dt><dd>${a.force}</dd>
+        <dt>Ombre</dt><dd>${a.ombre}</dd>
+        <dt>Levier</dt><dd>${a.levier}</dd>
+        <dt>Rareté</dt><dd>${pips(r)} <b class="rar-lib">${r}/5 ${LIB_RARETE[r-1]}</b> <span class="rar-pct">ordre de grandeur indicatif : ${PCT_RARETE[r-1]} de la population</span><span class="rar-note">${RARETE[a.id][1]}</span></dd>
+        <dt>Dénominations</dt><dd><i>${EN[a.id]}</i> en anglais${EN_PMAI[a.id]?`, <i>${EN_PMAI[a.id]}</i> dans l'instrument PMAI d'origine`:""}${ALIAS[a.id]?`, ${ALIAS[a.id]} dans la roue des marques`:""}.</dd>
+        <dt>Quadrant</dt><dd><b style="color:${TEINTE_QUAD[QUADRANT[a.id][0]]}">${QUADRANT[a.id][0]}</b>, ${QUADRANT[a.id][1].toLowerCase()}. Motivation propre : ${QUADRANT[a.id][2].toLowerCase()}.</dd>
+      </dl>`;
+}
+
+function ficheHTML(a,i){
+  return `<article class="fiche ${rangs[i]||""}">
+      <span class="score">${a.pct}/100</span>
+      <p class="eyebrow" style="margin:0">Rang ${i+1}</p>
+      <h3>${a.nom} <span class="en">(${EN[a.id]})</span></h3>
+      ${corpsHTML(a)}
+    </article>`;
+}
+
+/* Ligne dépliable du classement */
+function ligneHTML(a,i){
+  return `<details class="ligne" data-id="${a.id}">
+    <summary><span class="lg-grille">
+      <span class="mq" aria-hidden="true"></span>
+      <span class="lg-rang">${String(i+1).padStart(2,"0")}</span>
+      <span class="lg-nom">${a.nom} <span class="en">(${EN[a.id]})</span></span>
+      <span class="lg-trace"><i style="width:${Math.max(a.pct,2)}%"></i></span>
+      <span class="lg-val">${a.pct}</span>
+      <span class="lg-val ${a.ecart>=0?"plus":"moins"}">${a.ecart>=0?"+":""}${a.ecart}</span>
+      <span class="lg-rar">${pips(RARETE[a.id][0])}</span>
+    </span></summary>
+    <div class="lg-corps">${corpsHTML(a)}</div>
+  </details>`;
+}
+
+$("#tout-deplier").addEventListener("click",()=>
+  document.querySelectorAll("#classement .ligne").forEach(d=>d.open=true));
+$("#tout-replier").addEventListener("click",()=>
+  document.querySelectorAll("#classement .ligne").forEach(d=>d.open=false));
+
+/* ---- Copie du résultat, avec repli si le presse-papiers est bloqué ---- */
+function texteResultat(){
+  return "PROFIL ARCHETYPAL\n12 echelles independantes notees de 0 a 100. Le total n'a pas de sens.\n\n"+classement.map((a,i)=>
+    `${String(i+1).padStart(2,"0")}. ${a.nom} (${EN[a.id]}) : ${a.pct}/100  (ecart ${a.ecart>=0?"+":""}${a.ecart}, rarete ${RARETE[a.id][0]}/5)`).join("\n")+
+    "\n\nBESOINS FONDAMENTAUX\n"+quadrants.map(q=>
+      `${q.nom} : ${q.pct}/100  (${q.desir})`).join("\n")+
+    `\n\nDominante : ${classement[0].nom} (${classement[0].pct}/100)`+
+    `\nMoteur : ${classement[0].moteur}`+
+    `\nOmbre a surveiller : ${classement[0].ombre}`+
+    `\nLevier : ${classement[0].levier}`;
+}
+
+/* ---- Partage : un panneau, deux options ---- */
+function noteP(html){
+  const n=$("#note-partage");
+  n.innerHTML=html;
+  n.classList.remove("cache");
+}
+
+const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent||"")
+         || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+
+const AIDE_PDF = iOS
+  ? "Ouvre l'aperçu d'impression. Touche l'icône de partage en haut de l'aperçu, puis « Enregistrer dans Fichiers » : tu obtiens un PDF, partageable ensuite vers n'importe quelle application."
+  : "Ouvre la fenêtre d'impression. Choisis « Enregistrer au format PDF » comme destination, puis partage le fichier depuis ton gestionnaire de fichiers.";
+$("#opt-pdf-aide").textContent = AIDE_PDF;
+
+function ouvrirPartage(){
+  $("#voile").classList.remove("cache");
+  $("#opt-copier").focus();
+}
+function fermerPartage(){ $("#voile").classList.add("cache"); }
+
+$("#partager").addEventListener("click",ouvrirPartage);
+$("#fab-partage").addEventListener("click",ouvrirPartage);
+$("#fp-fermer").addEventListener("click",fermerPartage);
+$("#voile").addEventListener("click",e=>{ if(e.target.id==="voile") fermerPartage(); });
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape" && !$("#voile").classList.contains("cache")) fermerPartage();
+});
+
+/* Option 1 : copier le texte, avec les trois niveaux de repli */
+async function copierTexte(btn){
+  const txt=texteResultat();
+  const fini=msg=>{
+    const av=btn.querySelector(".opt-t")||btn;
+    const init=av.textContent;
+    av.textContent=msg;
+    setTimeout(()=>{av.textContent=init;},2000);
+  };
+
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      await navigator.clipboard.writeText(txt);
+      $("#secours").classList.add("cache");
+      fini("Copié");
+      setTimeout(fermerPartage,700);
+      return;
+    }
+  }catch(e){/* niveau suivant */}
+
+  try{
+    const ta=document.createElement("textarea");
+    ta.value=txt;
+    ta.contentEditable="true";           // iOS : sans cela la sélection échoue
+    ta.readOnly=false;
+    ta.style.cssText="position:fixed;top:0;left:0;font-size:16px;opacity:0";
+    document.body.appendChild(ta);
+    ta.focus();ta.select();
+    if(ta.setSelectionRange) ta.setSelectionRange(0,txt.length);
+    const ok=document.execCommand("copy");
+    document.body.removeChild(ta);
+    if(ok){
+      $("#secours").classList.add("cache");
+      fini("Copié");
+      setTimeout(fermerPartage,700);
+      return;
+    }
+  }catch(e){/* niveau suivant */}
+
+  // dernier recours : zone de texte visible, pré-sélectionnée
+  fermerPartage();
+  const zone=$("#secours-txt");
+  zone.value=txt;
+  $("#secours").classList.remove("cache");
+  noteP("<strong>Copie automatique refusée par le navigateur.</strong> Le texte est affiché juste en dessous, déjà sélectionné : appui long puis Copier.");
+  zone.focus();zone.select();
+  $("#secours").scrollIntoView({block:"center"});
+}
+$("#opt-copier").addEventListener("click",e=>copierTexte(e.currentTarget));
+
+/* Option 2 : export PDF via l'impression */
+$("#opt-pdf").addEventListener("click",()=>{
+  fermerPartage();
+  noteP("<strong>Export PDF.</strong> "+AIDE_PDF);
+  setTimeout(()=>window.print(),150);
+});
+
+/* Envoi du test lui-même : un lien, donc feuille de partage native si en ligne */
+$("#partager-test").addEventListener("click",async ()=>{
+  const enLigne=/^https?:$/.test(location.protocol);
+  if(enLigne){
+    const d={title:"Les Douze Figures",
+             text:"Test des 12 archétypes : 48 affirmations, environ 8 minutes.",
+             url:location.href};
+    if(navigator.share){
+      try{ await navigator.share(d); return; }
+      catch(e){ if(e && e.name==="AbortError") return; }
+    }
+    try{ await navigator.clipboard.writeText(location.href);
+         noteP("Lien du test copié. Collez-le dans WhatsApp ou ailleurs."); return; }
+    catch(e){}
+    noteP("Copiez le lien depuis la barre d'adresse de votre navigateur.");
+    return;
+  }
+  noteP(`<strong>Cette page est ouverte depuis un fichier local</strong>, elle n'a donc pas d'adresse partageable. Deux solutions :<br><br>
+    1. Envoyer le fichier <i>index.html</i> lui-même en pièce jointe. Sur Android le destinataire l'ouvre dans son navigateur ; sur iPhone c'est plus laborieux.<br><br>
+    2. L'héberger pour obtenir un vrai lien, par exemple avec GitHub Pages. Une fois en ligne, ce bouton ouvrira directement la feuille de partage du téléphone, WhatsApp compris.`);
+});
+
+/* Tout déplier avant impression, remettre l'état ensuite */
+let ouvertsAvant=[];
+window.addEventListener("beforeprint",()=>{
+  const d=[...document.querySelectorAll("details")];
+  ouvertsAvant=d.map(x=>x.open);
+  d.forEach(x=>x.open=true);
+});
+window.addEventListener("afterprint",()=>{
+  [...document.querySelectorAll("details")].forEach((x,i)=>x.open=!!ouvertsAvant[i]);
+});
+
+</script>
+</body>
+</html>
