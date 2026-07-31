@@ -57,6 +57,13 @@
   /* Classe utilitaire : !important indispensable, sinon toute règle de classe
      définissant display plus bas dans la feuille l'emporte par ordre de source.
      C'est ce qui rendait le panneau de partage (.voile{display:flex}) toujours visible. */
+  .diag{
+    margin:0;padding:16px 20px;background:#3A1420;color:#FFE9EC;
+    border-bottom:2px solid #B4626C;font-family:var(--mono);font-size:12.5px;
+    line-height:1.7;word-break:break-word
+  }
+  .diag b{display:block;margin-bottom:6px;color:#FFB9C2;font-size:13.5px}
+  .diag code{font-size:11.5px;color:#FFD9DE;background:rgba(0,0,0,.3);padding:1px 4px}
   .cache{display:none!important}
 
   /* ---- choix du mode ---- */
@@ -303,7 +310,7 @@
       --verdet:#2E6155;--carmin:#8D3F48;--azur:#2F5488;--trait:#C7C0AC}
     body{background:#fff!important;background-image:none!important;color:#141821}
     .cadre{max-width:none;padding:0}
-    #accueil,#test,#palier,#bloc-partage,#secours,.barre-nav,.fab,.voile,.bandeau-demo{display:none!important}
+    .diag,#accueil,#test,#palier,#bloc-partage,#secours,.barre-nav,.fab,.voile,.bandeau-demo{display:none!important}
     .aide:not(.garde){display:none!important}
     details.methode summary{display:none!important}
     details.methode{border:0;background:none}
@@ -321,6 +328,54 @@
 </style>
 </head>
 <body>
+<script>
+/* ---- Diagnostic, dans un bloc separe pour survivre a une erreur de
+   syntaxe du bloc principal. Affiche a l'ecran ce qui a echoue. ---- */
+(function(){
+  var vu=false;
+  function montre(titre,detail){
+    if(vu) return; vu=true;
+    var z=document.getElementById("diag");
+    if(!z) return;
+    z.className="diag";
+    z.innerHTML="<b>"+titre+"</b>"+detail+
+      "<br><br>Faites une capture de cet écran, elle indique la cause exacte.";
+  }
+  window.addEventListener("error",function(e){
+    var m=(e&&e.message)||"erreur inconnue";
+    var o=(e&&e.filename?" · "+e.filename:"")+(e&&e.lineno?" ligne "+e.lineno:"");
+    montre("Le script s'est arrêté sur une erreur.","<code>"+m+"</code>"+o);
+  });
+  window.addEventListener("unhandledrejection",function(e){
+    var m=(e&&e.reason&&(e.reason.message||e.reason))||"promesse rejetée";
+    montre("Une opération asynchrone a échoué.","<code>"+m+"</code>");
+  });
+  // fichier local : cause la plus fréquente d'un test qui ne démarre pas
+  if(location.protocol==="file:"){
+    var iOS=/iPad|iPhone|iPod/.test(navigator.userAgent||"");
+    montre("Page ouverte depuis un fichier local.",
+      iOS
+        ? "Sur iPhone, iOS interdit le JavaScript des fichiers locaux : ce test ne peut pas fonctionner ainsi. Ouvrez-le depuis une adresse web en https."
+        : "Le test devrait fonctionner, mais le partage de lien et le presse-papiers seront limités.");
+  }
+  // aucune erreur au bout de 3 s et le bouton de depart absent : on le signale
+  setTimeout(function(){
+    if(!vu && !document.getElementById("demarrer"))
+      montre("La page ne s'est pas construite correctement.",
+             "Le bouton de départ est absent du document.");
+  },3000);
+})();
+</script>
+
+<noscript>
+  <div class="diag">
+    <b>Le JavaScript ne s'exécute pas sur cette page.</b>
+    Si vous l'avez ouverte depuis un fichier téléchargé sur iPhone, c'est normal : iOS
+    interdit le JavaScript des fichiers locaux, et le test ne peut pas fonctionner ainsi.
+    Il faut l'ouvrir depuis une adresse web commençant par https.
+  </div>
+</noscript>
+<div class="diag cache" id="diag"></div>
 
 <main class="cadre">
 
