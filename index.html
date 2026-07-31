@@ -64,6 +64,12 @@
   }
   .diag b{display:block;margin-bottom:6px;color:#FFB9C2;font-size:13.5px}
   .diag code{font-size:11.5px;color:#FFD9DE;background:rgba(0,0,0,.3);padding:1px 4px}
+  .pied{
+    max-width:760px;margin:0 auto;padding:0 20px 26px;
+    font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+    color:rgba(169,167,156,.42);text-align:center;line-height:1.9
+  }
+  .pied span+span{margin-left:6px}
   .cache{display:none!important}
 
   /* ---- choix du mode ---- */
@@ -376,6 +382,12 @@
   </div>
 </noscript>
 <div class="diag cache" id="diag"></div>
+<div class="diag" id="canari">
+  <b>Le script de la page ne s'est pas exécuté jusqu'au bout.</b>
+  Cette bande disparaît d'elle-même dès que le code démarre correctement.
+  La voir signifie que rien n'a tourné : fichier ouvert en local, script bloqué,
+  ou erreur de chargement. <code id="canari-etat">étape 0</code>
+</div>
 
 <main class="cadre">
 
@@ -570,6 +582,10 @@
   </section>
 </main>
 
+<footer class="pied">
+  <span>build 2026-07-31 15:44 UTC · 53c06c01</span>
+  <span id="pied-servi"></span>
+</footer>
 <script>
 const ARCH = [
 {id:"sou",nom:"Le Souverain",abbr:"SOU",en:"Ruler",devise:"Ordonner ce qui doit durer.",
@@ -753,6 +769,11 @@ function sequence(long){
 }
 
 
+/* Témoin de progression : indique jusqu'où le script est allé. */
+function jalon(n){ try{ var e=document.getElementById("canari-etat");
+  if(e) e.textContent="étape "+n; }catch(x){} }
+jalon(1);
+
 /* ============ métadonnées ============ */
 const EN_PMAI={cam:"Orphan",her:"Warrior",exp:"Seeker",reb:"Destroyer"};
 const ALIAS={ama:"Le Séducteur",bou:"L'Amuseur",cam:"Le Citoyen",pro:"L'Ange-gardien",sou:"Le Dirigeant"};
@@ -807,6 +828,8 @@ const LIB=[{c:"1",t:"Pas du tout moi"},{c:"2",t:"Un peu"},{c:"3",t:"Moyennement"
 const ROM="I II III IV V VI VII VIII IX X XI XII XIII XIV XV XVI XVII XVIII XIX XX XXI XXII XXIII XXIV XXV XXVI XXVII XXVIII XXIX XXX XXXI XXXII XXXIII XXXIV XXXV XXXVI XXXVII XXXVIII XXXIX XL XLI XLII XLIII XLIV XLV XLVI XLVII XLVIII XLIX L LI LII LIII LIV LV LVI LVII LVIII LIX LX LXI LXII LXIII LXIV LXV LXVI LXVII LXVIII LXIX LXX LXXI LXXII".split(" ");
 const IDX={}; ARCH.forEach((a,i)=>IDX[a.id]=i);
 
+jalon(2);
+
 /* ============ état ============ */
 const $=s=>document.querySelector(s);
 const accueil=$("#accueil"), test=$("#test"), res=$("#resultats");
@@ -820,6 +843,8 @@ let IDS_SCORE=[], VERSION="rapide";
 let classement=[], moyenne=0, quadrants=[];
 const palier=$("#palier");
 const idCourant=()=>SEQ[PARCOURS[curseur]];
+
+jalon(3);
 
 /* ============ scoring ============ */
 /* Un item inversé contribue 6 - réponse : être d'accord fait baisser la figure. */
@@ -861,6 +886,8 @@ function calculeQuadrants(l){
       figures:m.map(a=>a.nom.replace(/^(Le |L'|La )/,""))};
   }).sort((x,y)=>y.pct-x.pct);
 }
+
+jalon(4);
 
 /* ============ reprise d'une session ============ */
 /* Encodage interne pour le stockage : une réponse par item de la banque,
@@ -920,6 +947,8 @@ function charger(){
   }catch(e){ return null; }
 }
 function oublier(){ try{ localStorage.removeItem(CLE); }catch(e){} }
+
+jalon(5);
 
 /* ============ questionnaire ============ */
 $("#echelle").innerHTML=LIB.map((l,i)=>
@@ -1068,6 +1097,8 @@ $("#palier-continuer").addEventListener("click",poursuivre);
 $("#palier-arreter").addEventListener("click",()=>{ palierPasse=true; montrerResultats(); });
 
 /* ============ départage des égalités ============ */
+jalon(6);
+
 /* ============ rendu ============ */
 function pips(n){ let h=""; for(let i=1;i<=5;i++) h+=`<i class="pip${i<=n?" on":""}"></i>`;
   return `<span class="pips" aria-label="rareté ${n} sur 5">${h}</span>`; }
@@ -1199,6 +1230,8 @@ function rendDepartage(groupes){
     : "";
 }
 
+jalon(7);
+
 /* ============ radar en rose ============
    - point noir au centre
    - histogrammes partant du centre : la figure la plus faible est à zéro,
@@ -1321,6 +1354,8 @@ function dessineRoue(){
     : `Vos douze figures sont au même niveau.`;
 }
 
+jalon(8);
+
 /* ============ partage ============ */
 function texteResultat(){
   const t=classement.filter(a=>a.rang===1);
@@ -1416,6 +1451,22 @@ window.addEventListener("afterprint",()=>{
   [...document.querySelectorAll("details")].forEach((x,i)=>x.open=!!etatAvant[i]);
 });
 
+/* Tout le script a été exécuté : on retire le témoin. */
+jalon(9);
+try{ var c=document.getElementById("canari"); if(c && c.parentNode) c.parentNode.removeChild(c); }
+catch(x){}
+
+</script>
+<script>
+/* Date de mise a disposition par le serveur : distingue le fichier construit
+   de ce que Pages sert reellement, cache compris. */
+(function(){
+  try{
+    var d=new Date(document.lastModified);
+    if(!isNaN(d)) document.getElementById("pied-servi").textContent=
+      "· servi le "+d.toLocaleString("fr-FR",{dateStyle:"short",timeStyle:"short"});
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
